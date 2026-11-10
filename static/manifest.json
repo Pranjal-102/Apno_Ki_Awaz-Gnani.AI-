@@ -1,0 +1,9 @@
+{
+  "name": "Apno Ki Awaaz",
+  "short_name": "Apno Ki Awaaz",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8f0",
+  "theme_color": "#d9622b",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

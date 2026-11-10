@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#25316D">
+<link rel="manifest" href="/manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700&family=Rozha+One&display=swap" rel="stylesheet">
+<title>Apno Ki Awaaz</title>
+<style>
+:root{--nila:#25316D;--ink:#1B2033;--mute:#5E6580;--page:#EEF1F6;--line:#D5DAE6;--haldi:#E8A317;--tulsi:#2C7A4B;--sindoor:#C4352B;
+  --serif:"Rozha One",Georgia,serif;--sans:"Mukta",system-ui,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:400 17px/1.5 var(--sans);transition:background .6s}
+.hidden{display:none!important}
+:focus-visible{outline:3px solid var(--haldi);outline-offset:2px}
+
+/* top bar */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;max-width:1120px;margin:0 auto;padding:18px 28px}
+.brand{display:flex;gap:14px;align-items:center}
+.mark{width:46px;height:46px;border-radius:12px 12px 12px 4px;background:var(--nila);color:#fff;font:400 28px/46px var(--serif);text-align:center}
+h1{margin:0;font:400 26px/1.1 var(--serif);color:var(--nila)}
+.brand p{margin:3px 0 0;font-size:14px;color:var(--mute)}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line)}
+.tabs button{background:none;border:0;border-radius:0;margin:0 0 -2px;padding:10px 16px;font:600 16px var(--sans);color:var(--mute);cursor:pointer;border-bottom:3px solid transparent}
+.tabs button.on{color:var(--nila);border-color:var(--nila)}
+
+/* family layout */
+.wrap{max-width:1120px;margin:0 auto;padding:8px 28px 56px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,1fr);gap:48px}
+.rail{border-left:1px solid var(--line);padding-left:36px}
+h2{margin:34px 0 12px;font:700 19px var(--sans)}
+.rail h2:first-child{margin-top:8px}
+.line{margin:12px 0 8px;font:400 clamp(28px,4vw,40px)/1.2 var(--serif);color:var(--nila)}
+.line.bad{color:var(--sindoor)}
+.sub{margin:0;color:var(--mute);max-width:54ch}
+.status{display:flex;gap:20px;flex-wrap:wrap;margin:16px 0 0;font-size:14px;color:var(--mute)}
+.dot::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--mute);margin-right:7px}
+.dot.ok::before{background:var(--tulsi)} .dot.bad::before{background:var(--sindoor)} .dot.warn::before{background:var(--haldi)}
+
+/* the weekly pill box */
+.box{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;padding:10px;background:#fff;border:2px solid var(--nila);border-radius:20px}
+.slot{display:flex;flex-direction:column;justify-content:space-between;align-items:center;min-height:116px;padding:10px 2px 8px;border-radius:10px;background:var(--page)}
+.slot.today{outline:3px solid var(--haldi);outline-offset:2px}
+.stack{display:flex;flex-direction:column;gap:7px;align-items:center;justify-content:center;flex:1}
+.pill{width:16px;height:16px;border-radius:50%;border:2px solid #9AA2BD}
+.pill.t{background:var(--tulsi);border-color:var(--tulsi)} .pill.m{background:var(--sindoor);border-color:var(--sindoor)}
+.none{color:#9AA2BD}
+.slot small{font-size:13px;font-weight:600;color:var(--mute)}
+.legend{display:flex;gap:18px;margin:10px 0 0;font-size:14px;color:var(--mute)}
+.legend i{display:inline-block;width:11px;height:11px;margin-right:6px;border-radius:50%;border:2px solid #9AA2BD;vertical-align:-1px}
+
+/* lists */
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.row small{display:block;font-size:14px;color:var(--mute)}
+.st{font-size:14px;font-weight:700;white-space:nowrap}
+.st.taken{color:var(--tulsi)} .st.missed,.st.alerted{color:var(--sindoor)} .st.pending,.st.announced,.st.nudge{color:#9A6B00}
+.ev{margin-bottom:6px;padding:8px 0 8px 14px;border-left:3px solid var(--line)}
+.ev.alert{border-color:var(--sindoor)} .ev.good{border-color:var(--tulsi)}
+.ev small{display:block;font-size:13px;color:var(--mute)}
+.chip{display:inline-block;margin:6px 6px 0 0;padding:1px 10px;border:1.5px solid var(--nila);border-radius:999px;font-size:14px;font-weight:600;color:var(--nila)}
+
+/* forms */
+label{display:block;margin:14px 0 5px;font-size:15px;font-weight:600}
+input,select{width:100%;padding:10px 12px;border:1.5px solid #B8BFD3;border-radius:8px;background:#fff;color:var(--ink);font:400 17px var(--sans)}
+.field{display:flex;gap:8px}
+.btn{margin-top:14px;padding:11px 18px;border:2px solid var(--nila);border-radius:10px;background:var(--nila);color:#fff;font:600 16px var(--sans);cursor:pointer}
+.btn.ghost{margin-top:0;background:transparent;color:var(--nila)}
+.btn.sm{margin:8px 8px 0 0;padding:5px 12px;font-size:14px}
+.btn.rec{background:var(--sindoor);border-color:var(--sindoor);color:#fff}
+.btn:disabled{opacity:.5}
+.msg{min-height:20px;margin:8px 0 0;font-size:14px;color:var(--mute)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:400}
+.consent input{width:auto;margin-top:5px}
+summary{margin-top:14px;cursor:pointer;font-weight:600;color:var(--nila)}
+
+/* elder's phone */
+body.elder{background:var(--nila);color:#fff}
+body.elder.due{background:var(--haldi);color:var(--ink)}
+body.elder h1{color:currentColor}
+body.elder .brand p{color:currentColor;opacity:.8}
+body.elder .mark{background:#fff;color:var(--nila)}
+body.elder.due .mark{background:var(--ink);color:#fff}
+body.elder .tabs{border-color:#ffffff40}
+body.elder .tabs button{color:currentColor;opacity:.75}
+body.elder .tabs button.on{opacity:1;border-color:currentColor}
+.stage{max-width:620px;min-height:calc(100vh - 130px);margin:0 auto;padding:16px 22px 60px;text-align:center}
+.start{width:100%;margin-top:16vh;padding:28px 24px;border:0;border-radius:28px;background:#fff;color:var(--nila);font:400 40px var(--serif);cursor:pointer}
+.start small{display:block;margin-top:8px;font:400 16px var(--sans);color:var(--mute)}
+.clock{margin:12vh 0 8px;font:400 clamp(84px,22vw,150px)/1 var(--serif)}
+.next{margin:0 0 10px;font-size:24px}
+.calm{margin:0;font-size:22px;opacity:.8}
+.note{margin:6vh 0 0;font-size:22px;font-weight:700}
+.big{margin:8px 0 18px;font:400 clamp(40px,10vw,64px)/1.15 var(--serif)}
+.act{display:block;width:100%;margin-top:14px;padding:22px;border:3px solid var(--ink);border-radius:24px;background:transparent;color:var(--ink);font:700 28px var(--sans);cursor:pointer}
+.act.yes{background:var(--tulsi);border-color:var(--tulsi);color:#fff}
+.act.talk{background:var(--ink);border-color:var(--ink);color:#fff}
+.act.rec{background:var(--sindoor);border-color:var(--sindoor);color:#fff}
+.heard{min-height:30px;margin-top:14px;font-size:20px}
+.sos{margin-top:34px;padding:14px 26px;border:3px solid #fff;border-radius:999px;background:var(--sindoor);color:#fff;font:700 22px var(--sans);cursor:pointer}
+
+@media(max-width:900px){
+  .wrap{grid-template-columns:1fr;gap:28px;padding:8px 18px 48px}
+  .rail{padding:24px 0 0;border-left:0;border-top:1px solid var(--line)}
+  .bar{padding:14px 18px}
+}
+/* decoration and motion */
+.bar,main{position:relative;z-index:1}
+.decor{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:.55;transition:opacity .6s}
+body.elder .decor{opacity:.12}
+.ob{position:absolute;will-change:transform}
+.ob svg{display:block;width:70px;height:70px;animation:fl 8s ease-in-out infinite;animation-delay:var(--d,0s)}
+@keyframes fl{50%{transform:translateY(-14px) rotate(7deg)}}
+#prog{position:fixed;left:0;top:0;z-index:5;width:0;height:4px;background:var(--haldi)}
+section{position:relative}
+section .line,section .sub{padding-right:150px}
+.heroart{position:absolute;right:0;top:0;width:130px}
+.heroart g rect{transform-box:fill-box;transform-origin:center;animation:bar 1.1s ease-in-out infinite alternate}
+.heroart g rect:nth-child(2){animation-delay:.2s}.heroart g rect:nth-child(3){animation-delay:.4s}.heroart g rect:nth-child(4){animation-delay:.6s}
+@keyframes bar{from{transform:scaleY(.35)}to{transform:scaleY(1.15)}}
+.js .rv{opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s}
+.js .rv.in{opacity:1;transform:none}
+.box{min-height:136px}
+.box.pre .pill{opacity:0;transform:scale(0)}
+.box.go .pill{animation:pop .5s calc(var(--i)*90ms) backwards cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{opacity:0;transform:scale(0)}}
+#waiting{position:relative}
+.rings{position:absolute;left:50%;top:calc(12vh + 70px)}
+.rings i{position:absolute;left:-130px;top:-130px;width:260px;height:260px;border:2px solid currentColor;border-radius:50%;opacity:0;animation:ring 5s ease-out infinite}
+.rings i:nth-child(2){animation-delay:1.7s}.rings i:nth-child(3){animation-delay:3.4s}
+@keyframes ring{from{transform:scale(.5);opacity:.35}to{transform:scale(1.9);opacity:0}}
+.clock,.next,.calm{position:relative}
+.diya{width:84px;margin-top:26px}
+.flame{transform-origin:40px 30px;animation:fk 1.6s ease-in-out infinite}
+@keyframes fk{50%{transform:scale(1.1,.92)}}
+@media(max-width:900px){section .line,section .sub{padding-right:0}.heroart{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="capsule" viewBox="0 0 64 64"><g transform="rotate(-35 32 32)"><rect x="8" y="22" width="48" height="20" rx="10" fill="#E8A317"/><path d="M32 22h14a10 10 0 0 1 0 20H32z" fill="#25316D"/></g></symbol>
+  <symbol id="tablet" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="#fff" stroke="#25316D" stroke-width="3"/><path d="M14 32h36" stroke="#25316D" stroke-width="3"/></symbol>
+  <symbol id="flower" viewBox="0 0 64 64"><g fill="#E8A317"><ellipse cx="32" cy="14" rx="7" ry="11"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(45 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(90 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(135 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(180 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(225 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(270 32 32)"/><ellipse cx="32" cy="14" rx="7" ry="11" transform="rotate(315 32 32)"/></g><circle cx="32" cy="32" r="8" fill="#C4352B" opacity=".85"/></symbol>
+  <symbol id="leaf" viewBox="0 0 64 64"><path d="M12 52C12 26 28 10 54 10c0 26-14 42-38 42z" fill="#2C7A4B"/><path d="M14 50L44 20" stroke="#fff" stroke-width="2" opacity=".6"/></symbol>
+  <symbol id="wave" viewBox="0 0 64 64"><g fill="#25316D"><rect x="8" y="26" width="6" height="12" rx="3"/><rect x="19" y="16" width="6" height="32" rx="3"/><rect x="30" y="8" width="6" height="48" rx="3"/><rect x="41" y="20" width="6" height="24" rx="3"/><rect x="52" y="27" width="6" height="10" rx="3"/></g></symbol>
+</defs></svg>
+<div id="prog"></div>
+<div class="decor" aria-hidden="true">
+  <div class="ob" data-s=".08" style="left:3%;top:16%"><svg style="width:84px;height:84px"><use href="#capsule"/></svg></div>
+  <div class="ob" data-s=".14" style="left:90%;top:9%"><svg style="width:96px;height:96px;--d:-3s"><use href="#flower"/></svg></div>
+  <div class="ob" data-s=".06" style="left:94%;top:52%"><svg style="--d:-5s"><use href="#leaf"/></svg></div>
+  <div class="ob" data-s=".12" style="left:5%;top:60%"><svg style="width:60px;height:60px;--d:-2s"><use href="#tablet"/></svg></div>
+  <div class="ob" data-s=".05" style="left:47%;top:86%"><svg style="width:90px;height:90px;--d:-4s"><use href="#wave"/></svg></div>
+  <div class="ob" data-s=".10" style="left:2%;top:86%"><svg style="--d:-6s"><use href="#flower"/></svg></div>
+  <div class="ob" data-s=".15" style="left:87%;top:82%"><svg style="--d:-1s"><use href="#capsule"/></svg></div>
+  <div class="ob" data-s=".09" style="left:48%;top:3%"><svg style="width:56px;height:56px;--d:-7s"><use href="#leaf"/></svg></div>
+</div>
+<header class="bar">
+  <div class="brand">
+    <div class="mark">अ</div>
+    <div><h1>अपनों की आवाज़</h1><p>Medicine reminders in a family member's own voice</p></div>
+  </div>
+  <nav class="tabs">
+    <button id="tabFamily" class="on">Family</button>
+    <button id="tabElder">Elder's phone</button>
+  </nav>
+</header>
+
+<!-- ============ FAMILY ============ -->
+<main id="family" class="wrap">
+  <div>
+    <section>
+      <svg class="heroart" viewBox="0 0 140 150" aria-hidden="true"><rect x="38" y="14" width="64" height="118" rx="14" fill="#25316D"/><rect x="45" y="26" width="50" height="94" rx="8" fill="#fff"/><g fill="#E8A317"><rect x="54" y="62" width="5" height="18" rx="2.5"/><rect x="64" y="52" width="5" height="38" rx="2.5"/><rect x="74" y="58" width="5" height="26" rx="2.5"/><rect x="84" y="66" width="5" height="10" rx="2.5"/></g><path d="M112 50c10 8 10 28 0 36M122 40c15 14 15 46 0 60" fill="none" stroke="#2C7A4B" stroke-width="4" stroke-linecap="round"/><path d="M22 34c-8-9 5-19 10-9 5-10 18 0 10 9l-10 11z" fill="#C4352B"/></svg>
+      <p class="line" id="heroLine">Checking in…</p>
+      <p class="sub" id="heroSub"></p>
+      <p class="status"><span id="pillDevice" class="dot">Elder's phone</span><span id="pillTg" class="dot">Telegram alerts</span></p>
+    </section>
+
+    <h2>This week</h2>
+    <div class="box" id="bars"></div>
+    <div class="legend">
+      <span><i style="background:var(--tulsi);border-color:var(--tulsi)"></i>Taken</span>
+      <span><i style="background:var(--sindoor);border-color:var(--sindoor)"></i>Missed</span>
+      <span><i></i>Waiting</span>
+    </div>
+    <p class="sub" id="adhLine" style="margin-top:14px"></p>
+
+    <h2>Today</h2>
+    <div id="today"></div>
+    <h2>Recent activity</h2>
+    <div id="events"></div>
+  </div>
+
+  <aside class="rail">
+    <h2>Whose voice?</h2>
+    <select id="voiceSel" aria-label="Voice"></select>
+    <details>
+      <summary>Add a family member's voice</summary>
+      <label for="vName">Name</label>
+      <input id="vName" placeholder="Papa">
+      <p class="msg" style="margin-top:10px">Record 15–20 seconds of them speaking naturally.</p>
+      <button class="btn ghost" id="recVoice">🎙️ Record voice</button>
+      <div class="msg" id="voiceMsg"></div>
+      <label class="consent"><input type="checkbox" id="consent">This is my own voice, or I have this person's permission to clone it.</label>
+      <button class="btn" id="saveVoice">Save voice</button>
+    </details>
+
+    <h2>Daily medicine</h2>
+    <label for="elder">Who takes it?</label>
+    <input id="elder" value="दादी">
+    <label for="task">Medicine (type it, or tap the mic)</label>
+    <div class="field"><input id="task" placeholder="BP की गोली"><button class="btn ghost" id="recTask" aria-label="Speak the medicine">🎙️</button></div>
+    <label for="timeIn">Times, every day</label>
+    <div class="field"><input id="timeIn" type="time" value="08:00"><button class="btn ghost" id="addTime">Add time</button></div>
+    <div id="timeChips"></div>
+    <button class="btn" id="create">Save schedule</button>
+    <div class="msg" id="createMsg"></div>
+
+    <h2>Active schedules</h2>
+    <div id="schedList"></div>
+  </aside>
+</main>
+
+<!-- ============ ELDER'S PHONE ============ -->
+<main id="elder-view" class="stage hidden">
+  <button id="startElder" class="start">शुरू करें<small>Tap once to start this phone</small></button>
+
+  <div id="waiting" class="hidden">
+    <div class="rings"><i></i><i></i><i></i></div>
+    <div class="clock" id="clock"></div>
+    <p class="next" id="nextDose"></p>
+    <p class="calm">सब ठीक है</p>
+    <svg class="diya" viewBox="0 0 80 60" aria-hidden="true"><path d="M8 34h64c0 14-14 24-32 24S8 48 8 34z" fill="#E8A317"/><path class="flame" d="M40 6c9 10 10 18 0 24-10-6-9-14 0-24z" fill="#fff"/></svg>
+  </div>
+
+  <div id="remCard" class="hidden">
+    <p class="note" id="eNote"></p>
+    <div class="big" id="eTask"></div>
+    <button class="act yes" id="eTaken">✓ दवा ले ली</button>
+    <button class="act talk" id="eMic">🎙️ बोलकर बताइए</button>
+    <button class="act" id="eLater">बाद में</button>
+    <div class="heard" id="eHeard"></div>
+  </div>
+
+  <button class="sos hidden" id="sos">मदद चाहिए</button>
+  <div class="heard" id="sosMsg"></div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) { let m = r.statusText; try { m = (await r.json()).detail || m; } catch (e) {} throw new Error(m); }
+  return r.json();
+}
+const post = (p, o) => api(p, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(o || {}) });
+
+/* ---------- microphone ---------- */
+function makeRecorder() {
+  let mr, chunks = [], stream, timer;
+  return {
+    async start(maxMs, onAuto) {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mr = new MediaRecorder(stream); chunks = [];
+      mr.ondataavailable = e => chunks.push(e.data);
+      mr.start();
+      timer = setTimeout(() => { if (mr.state === "recording" && onAuto) onAuto(); }, maxMs);
+    },
+    stop() {
+      return new Promise(res => {
+        clearTimeout(timer);
+        mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); res(new Blob(chunks, { type: mr.mimeType })); };
+        mr.stop();
+      });
+    }
+  };
+}
+function wireMic(btn, maxMs, onBlob, startLabel, stopLabel) {
+  const r = makeRecorder(); let on = false;
+  btn.onclick = async () => {
+    if (!on) {
+      try { await r.start(maxMs, () => btn.click()); } catch (e) { alert("Please allow microphone access."); return; }
+      on = true; btn.classList.add("rec"); btn.textContent = stopLabel;
+    } else {
+      on = false; btn.classList.remove("rec"); btn.textContent = startLabel;
+      onBlob(await r.stop());
+    }
+  };
+}
+
+/* ---------- shared state and helpers ---------- */
+let schedules = [], times = [], voiceBlob = null, lastStats = null;
+let current = null, companionOn = false, wakeLock = null, audioNow = null;
+
+function nextDose() {
+  const now = new Date(); let best = null;
+  schedules.forEach(s => s.times.forEach(t => {
+    const [hh, mm] = t.split(":").map(Number);
+    for (let add = 0; add < 2; add++) {
+      const d = new Date(now); d.setDate(d.getDate() + add); d.setHours(hh, mm, 0, 0);
+      if (d > now) { if (!best || d < best.d) best = { d, s }; break; }
+    }
+  }));
+  return best;
+}
+const fmtT = d => d.toLocaleTimeString("en-IN", { hour: "numeric", minute: "2-digit" });
+
+function showTab(n) {
+  $("family").classList.toggle("hidden", n !== "family");
+  $("elder-view").classList.toggle("hidden", n !== "elder");
+  $("tabFamily").classList.toggle("on", n === "family");
+  $("tabElder").classList.toggle("on", n === "elder");
+  document.body.classList.toggle("elder", n === "elder");
+  document.body.classList.toggle("due", n === "elder" && !!current);
+  history.replaceState(null, "", n === "elder" ? "#elder" : location.pathname);
+}
+$("tabFamily").onclick = () => showTab("family");
+$("tabElder").onclick = () => showTab("elder");
+
+/* ====================== FAMILY ====================== */
+async function loadVoices() {
+  const v = await api("/api/voices");
+  $("voiceSel").innerHTML = v.map(x => `<option value="${x.id}">${esc(x.name)}</option>`).join("") || "<option value=''>No voice yet</option>";
+}
+wireMic($("recVoice"), 20000, blob => {
+  voiceBlob = blob;
+  $("voiceMsg").textContent = "Recorded (" + Math.round(blob.size / 1024) + " KB). Tick the consent box, then save.";
+}, "🎙️ Record voice", "Stop recording");
+
+$("saveVoice").onclick = async () => {
+  if (!voiceBlob) return alert("Record a voice sample first.");
+  if (!$("vName").value.trim()) return alert("Enter a name.");
+  const fd = new FormData();
+  fd.append("name", $("vName").value.trim());
+  fd.append("consent", $("consent").checked ? "true" : "false");
+  fd.append("audio", voiceBlob, "voice.webm");
+  $("voiceMsg").textContent = "Cloning the voice…";
+  try { await api("/api/voices", { method: "POST", body: fd }); $("voiceMsg").textContent = "Voice saved."; voiceBlob = null; loadVoices(); }
+  catch (e) { $("voiceMsg").textContent = "Could not save: " + e.message; }
+};
+
+wireMic($("recTask"), 8000, async blob => {
+  $("createMsg").textContent = "Listening…";
+  const fd = new FormData(); fd.append("audio", blob, "task.webm");
+  try { const d = await api("/api/stt", { method: "POST", body: fd }); $("task").value = d.transcript; $("createMsg").textContent = "Heard: " + d.transcript; }
+  catch (e) { $("createMsg").textContent = "Could not hear that: " + e.message; }
+}, "🎙️", "■");
+
+function renderTimes() {
+  $("timeChips").innerHTML = times.map((t, i) => `<span class="chip">${t} <a href="#" data-i="${i}" aria-label="Remove ${t}" style="text-decoration:none;color:inherit">✕</a></span>`).join("");
+  $("timeChips").querySelectorAll("a").forEach(a => a.onclick = ev => { ev.preventDefault(); times.splice(+a.dataset.i, 1); renderTimes(); });
+}
+$("addTime").onclick = () => { const v = $("timeIn").value; if (v && !times.includes(v)) { times.push(v); times.sort(); renderTimes(); } };
+
+$("create").onclick = async () => {
+  const voice_id = parseInt($("voiceSel").value);
+  if (!$("task").value.trim()) return alert("Enter the medicine.");
+  if (!times.length) return alert("Add at least one time.");
+  if (!voice_id) return alert("Add a voice first.");
+  $("create").disabled = true; $("createMsg").textContent = "Recording the voice messages…";
+  try {
+    await post("/api/schedules", { elder_name: $("elder").value, task: $("task").value, times, voice_id });
+    $("createMsg").textContent = "Schedule saved."; times = []; renderTimes(); loadSchedules();
+  } catch (e) { $("createMsg").textContent = "Could not save: " + e.message; }
+  $("create").disabled = false;
+};
+
+async function loadSchedules() {
+  try {
+    schedules = await api("/api/schedules");
+    $("schedList").innerHTML = schedules.map(s =>
+      `<div class="row"><span><b>${esc(s.task)}</b><small>for ${esc(s.elder_name)}</small>${s.times.map(t => `<span class="chip">${t}</span>`).join("")}<br>
+       <button class="btn ghost sm" data-test="${s.id}">Send test reminder</button><button class="btn ghost sm" data-del="${s.id}">Remove</button></span></div>`
+    ).join("") || '<p class="msg">No schedules yet. Pick a voice and add a medicine above.</p>';
+    $("schedList").querySelectorAll("[data-test]").forEach(b => b.onclick = async () => {
+      await post(`/api/schedules/${b.dataset.test}/test`);
+      $("createMsg").textContent = "Test reminder sent. Open the Elder's phone tab and tap Start.";
+    });
+    $("schedList").querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+      await api(`/api/schedules/${b.dataset.del}`, { method: "DELETE" }); loadSchedules();
+    });
+    renderHero();
+  } catch (e) {}
+}
+
+const STATUS = { pending: "Scheduled", announced: "Waiting for reply", nudge: "Second reminder", taken: "Taken", missed: "Missed", alerted: "Family alerted" };
+const EVENT = {
+  announced: "Reminder played", nudged: "Second reminder played", taken: "Confirmed taken", snoozed: "Asked for later",
+  unclear: "Reply not understood", missed: "No response. Family alerted.", offline: "Phone offline. Family alerted.",
+  emergency: "Possible emergency. Family alerted.", sos: "Help button pressed. Family alerted."
+};
+
+function renderHero() {
+  const s = lastStats; if (!s) return;
+  const name = (s.today[0] || schedules[0] || {}).elder_name || "Your family member";
+  const n = nextDose(), nextTxt = n ? `Next: ${n.s.task} at ${fmtT(n.d)}.` : "";
+  const bad = s.today.find(r => r.status === "missed" || r.status === "alerted");
+  const open = s.today.find(r => ["pending", "announced", "nudge"].includes(r.status));
+  const done = s.today.filter(r => r.status === "taken").length;
+  let line, sub, cls = "";
+  if (!schedules.length) { line = "No medicines scheduled yet."; sub = "Choose a voice and add a daily medicine. Reminders play at the times you set."; }
+  else if (bad) { line = `${name} missed ${bad.task}.`; sub = s.telegram ? "You were alerted on Telegram. Please call to check in." : "Connect Telegram to be alerted automatically. Please call to check in."; cls = "bad"; }
+  else if (open) { line = `Reminding ${name} about ${open.task}.`; sub = "Waiting for a reply from the elder's phone."; }
+  else if (s.today.length) { line = `${name} has taken ${done} of ${s.today.length} medicines today.`; sub = nextTxt; }
+  else { line = `Nothing due yet today for ${name}.`; sub = nextTxt; }
+  $("heroLine").textContent = line; $("heroLine").className = "line " + cls; $("heroSub").textContent = sub;
+}
+
+async function loadStats() {
+  try {
+    const s = await api("/api/stats"); lastStats = s; renderHero();
+    $("pillDevice").className = "dot " + (s.online ? "ok" : "bad");
+    $("pillDevice").textContent = s.online ? "Elder's phone is online" : (s.seen_ago == null ? "Elder's phone not connected yet" : "Elder's phone is offline");
+    $("pillTg").className = "dot " + (s.telegram ? "ok" : "warn");
+    $("pillTg").textContent = s.telegram ? "Family alerts on Telegram" : "Telegram alerts not connected";
+
+    $("bars").innerHTML = s.days.map((d, i) => {
+      const dots = [...Array(d.taken).fill("t"), ...Array(d.bad).fill("m"), ...Array(d.open).fill("")];
+      const label = i === 6 ? "Today" : new Date(d.day + "T00:00:00").toLocaleDateString("en-IN", { weekday: "short" });
+      return `<div class="slot${i === 6 ? " today" : ""}" style="--i:${i}"><div class="stack">${dots.map(c => `<span class="pill ${c}"></span>`).join("") || '<span class="none">–</span>'}</div><small>${label}</small></div>`;
+    }).join("");
+
+    $("adhLine").textContent = s.adherence == null ? "Adherence shows up after the first dose."
+      : `${s.adherence}% of doses taken in the last 7 days.` + (s.streak ? ` ${s.streak} ${s.streak === 1 ? "day" : "days"} in a row without a miss.` : "");
+
+    $("today").innerHTML = s.today.map(r =>
+      `<div class="row"><span><b>${esc(r.task)}</b><small>${esc(r.elder_name)} at ${esc(r.due_at.slice(11, 16))}</small></span><span class="st ${r.status}">${STATUS[r.status] || r.status}</span></div>`
+    ).join("") || '<p class="msg">Nothing has come due yet today.</p>';
+
+    $("events").innerHTML = s.events.map(e => {
+      const cls = ["missed", "offline", "emergency", "sos"].includes(e.kind) ? "alert" : e.kind === "taken" ? "good" : "";
+      const who = e.task ? `${esc(e.elder_name)}, ${esc(e.task)}: ` : "";
+      const detail = ["taken", "unclear", "snoozed"].includes(e.kind) && e.detail && e.detail !== "(tapped)" ? ` – “${esc(e.detail)}”` : "";
+      return `<div class="ev ${cls}">${who}${EVENT[e.kind] || esc(e.kind)}<small>${esc(e.at.slice(5, 16))}${detail}</small></div>`;
+    }).join("") || '<p class="msg">Activity will appear here.</p>';
+  } catch (e) {}
+}
+
+/* ====================== ELDER'S PHONE ====================== */
+function play(url) { if (!url) return; try { if (audioNow) audioNow.pause(); audioNow = new Audio(url); audioNow.play().catch(() => {}); } catch (e) {} }
+async function keepAwake() { try { wakeLock = await navigator.wakeLock.request("screen"); } catch (e) {} }
+document.addEventListener("visibilitychange", () => { if (companionOn && document.visibilityState === "visible") keepAwake(); });
+
+function tickClock() {
+  $("clock").textContent = new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  const n = nextDose(); $("nextDose").textContent = n ? `अगली दवा: ${n.s.task}, ${fmtT(n.d)}` : "";
+}
+
+$("startElder").onclick = () => {
+  companionOn = true;
+  $("startElder").classList.add("hidden"); $("waiting").classList.remove("hidden"); $("sos").classList.remove("hidden");
+  keepAwake(); tickClock(); setInterval(tickClock, 1000);
+  const beat = () => fetch("/api/heartbeat", { method: "POST" }).catch(() => {});
+  beat(); setInterval(beat, 5000); setInterval(poll, 4000); poll();
+};
+
+async function poll() {
+  if (current) return;
+  try { const items = await api("/api/due"); if (items.length) showReminder(items[0]); } catch (e) {}
+}
+function showReminder(it) {
+  current = it; showTab("elder");
+  $("waiting").classList.add("hidden"); $("remCard").classList.remove("hidden");
+  $("eTask").textContent = it.elder_name + ", " + it.task;
+  $("eNote").textContent = it.nudge ? "दोबारा याद दिलाया जा रहा है" : "दवा का समय हो गया है";
+  $("eHeard").textContent = "";
+  document.body.classList.add("due");
+  play(it.audio_url);
+}
+function handleResult(d) {
+  $("eHeard").textContent = d.transcript && d.transcript !== "(tapped)" ? "आपने कहा: " + d.transcript : "";
+  play(d.audio_url);
+  if (d.intent !== "unclear") {
+    $("eNote").textContent = d.intent === "taken" ? "शुक्रिया!" : d.intent === "emergency" ? "परिवार को खबर की जा रही है" : "ठीक है, थोड़ी देर बाद";
+    current = null;
+    setTimeout(() => {
+      document.body.classList.remove("due");
+      $("remCard").classList.add("hidden"); $("waiting").classList.remove("hidden"); loadStats();
+    }, 5000);
+  }
+}
+async function act(action) {
+  if (!current) return;
+  try { handleResult(await post(`/api/doses/${current.id}/action`, { action })); } catch (e) { $("eHeard").textContent = "Error: " + e.message; }
+}
+$("eTaken").onclick = () => act("taken");
+$("eLater").onclick = () => act("snooze");
+wireMic($("eMic"), 6000, async blob => {
+  if (!current) return;
+  $("eHeard").textContent = "सुन रहा हूँ…";
+  const fd = new FormData(); fd.append("audio", blob, "reply.webm");
+  try { handleResult(await api(`/api/doses/${current.id}/reply`, { method: "POST", body: fd })); }
+  catch (e) { $("eHeard").textContent = "Error: " + e.message; }
+}, "🎙️ बोलकर बताइए", "■ रोकिए");
+
+$("sos").onclick = async () => {
+  if (!confirm("परिवार को खबर भेजें?")) return;
+  try { const d = await post("/api/sos"); play(d.audio_url); $("sosMsg").textContent = "परिवार को खबर भेज दी गई है।"; }
+  catch (e) { $("sosMsg").textContent = "Error: " + e.message; }
+};
+
+/* ---------- motion: scroll reveal, pill-box entrance, parallax, progress ---------- */
+document.documentElement.classList.add("js");
+if (!matchMedia("(prefers-reduced-motion:reduce)").matches) {
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+  }), { threshold: .12 });
+  document.querySelectorAll(".wrap h2,#today,#events,#schedList,.rail details").forEach(el => { el.classList.add("rv"); io.observe(el); });
+
+  const box = $("bars"); box.classList.add("pre");
+  new IntersectionObserver((es, o) => {
+    if (es[0].isIntersecting) {
+      box.classList.remove("pre"); box.classList.add("go");
+      setTimeout(() => box.classList.remove("go"), 2200); o.disconnect();
+    }
+  }, { threshold: .4 }).observe(box);
+
+  const obs = [...document.querySelectorAll(".ob")]; let busy = false;
+  addEventListener("scroll", () => {
+    if (busy) return; busy = true;
+    requestAnimationFrame(() => {
+      const y = scrollY;
+      obs.forEach(o => o.style.transform = `translate3d(0,${-y * o.dataset.s}px,0)`);
+      $("prog").style.width = (y / Math.max(1, document.documentElement.scrollHeight - innerHeight) * 100) + "%";
+      busy = false;
+    });
+  }, { passive: true });
+}
+
+/* ---------- start ---------- */
+loadVoices(); loadSchedules(); loadStats();
+setInterval(loadStats, 4000); setInterval(loadSchedules, 15000);
+if (location.hash === "#elder") showTab("elder");
+</script>
+</body>
+</html>

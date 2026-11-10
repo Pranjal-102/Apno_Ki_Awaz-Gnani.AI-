@@ -1,0 +1,10 @@
+.env
+venv/
+voice_embedding.json
+apno.db
+audio/
+apno_v2.db*
+audio/
+*.wav
+*.m4a
+__pycache__/
